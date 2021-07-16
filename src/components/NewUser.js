@@ -7,8 +7,6 @@ export default function NewUser(props) {
   const handleChange = (e) => {
     updateFormData({
       ...formData,
-
-      // Trimming any whitespace
       [e.target.name]: e.target.value.trim(),
     });
   };
@@ -28,20 +26,13 @@ export default function NewUser(props) {
         "Bearer 7f9912c5ee3bf743fb5e548ba9b9ca45444351294ebd7c50c5841799146741d8",
       "Content-type": "application/json",
     };
-    let newUserid = -1;
     axios
       .post("https://gorest.co.in/public-api/users", form, { headers })
       .then((response) => {
         console.log(response.data);
-        newUserid = response.data.data.id;
+        alert("New user added!");
       })
       .then(() => console.log("Data Posted"))
-      .then(() => {
-        if (newUserid !== -1) {
-          let newList = [{ id: newUserid, ...form }, ...props.users];
-          props.setUsers(newList);
-        }
-      })
       .catch((err) => console.log(err));
 
     props.onHide();

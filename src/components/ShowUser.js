@@ -5,10 +5,10 @@ import { Button, Modal } from "react-bootstrap";
 
 export default function ShowUserModal(props) {
   const [loading, setLoading] = useState(false);
-
+  const [id] = useState(props.id);
   const [user, setUser] = useState({});
   useEffect(() => {
-    const getUser = async (id) => {
+    const getUser = async () => {
       setLoading(true);
       const res = await axios.get(
         `https://gorest.co.in/public-api/users/${id}`
@@ -16,8 +16,9 @@ export default function ShowUserModal(props) {
       setUser(res.data.data);
       setLoading(false);
     };
-    getUser(props.id);
-  }, []);
+
+    getUser();
+  }, [id]);
   return (
     <Modal
       {...props}
@@ -31,7 +32,9 @@ export default function ShowUserModal(props) {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {!loading && (
+        {loading ? (
+          "Loading..."
+        ) : (
           <ul className="list-group">
             <li className="list-group-item">
               <div className="row">

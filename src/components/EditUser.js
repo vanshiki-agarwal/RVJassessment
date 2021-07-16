@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./User.css";
 import axios from "axios";
 import { Button, Modal } from "react-bootstrap";
@@ -13,8 +13,6 @@ export default function EditUserModal(props) {
   const handleChange = (e) => {
     updateFormData({
       ...formData,
-
-      // Trimming any whitespace
       [e.target.name]: e.target.value.trim(),
     });
   };
@@ -40,14 +38,17 @@ export default function EditUserModal(props) {
       })
       .then((response) => console.log(response.data))
       .then(() => console.log("Data Updated"))
+      .then(() => {
+        let newUsers = props.users.map((currentUser) => {
+          if (currentUser.id === props.id) {
+            return { ...form, id: props.id };
+          }
+          return currentUser;
+        });
+        props.setUsers(newUsers);
+      })
       .catch((err) => console.log(err));
-    let newUsers = props.users.map((currentUser) => {
-      if (currentUser.id === props.id) {
-        return { ...form, id: props.id };
-      }
-      return currentUser;
-    });
-    props.setUsers(newUsers);
+
     props.onHide();
   };
 
@@ -96,7 +97,7 @@ export default function EditUserModal(props) {
                 required
               >
                 {" "}
-                <option selected value="male">
+                <option defaultValue value="male">
                   Male
                 </option>
                 <option value="female">Female</option>
@@ -110,7 +111,7 @@ export default function EditUserModal(props) {
               >
                 {" "}
                 <option value="male">Male</option>
-                <option selected value="female">
+                <option defaultValue value="female">
                   Female
                 </option>
               </select>

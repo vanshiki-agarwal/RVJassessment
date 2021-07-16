@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import "./User.css";
 import axios from "axios";
 import { Button, Modal } from "react-bootstrap";
@@ -13,12 +13,15 @@ export default function DeleteUserModal(props) {
     axios
       .delete(`https://gorest.co.in/public-api/users/${props.id}`, { headers })
       .then((response) => console.log(response.data))
-      .then(() => console.log("user deleted"))
+      .then(() => console.log("User deleted."))
+      .then(() => {
+        let modifiedUsers = props.users.filter(
+          (currentUser) => currentUser.id !== props.id
+        );
+        props.setUsers(modifiedUsers);
+      })
       .catch((err) => console.log(err));
-    let modifiedUsers = props.users.filter(
-      (currentUser) => currentUser.id !== props.id
-    );
-    props.setUsers(modifiedUsers);
+
     props.onHide();
   };
   return (
